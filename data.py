@@ -3,6 +3,7 @@ from os import listdir
 from os.path import isfile, join
 from display import display_PIL
 import matplotlib.pyplot as plt
+from random import shuffle
 
 class Data:
 
@@ -83,7 +84,26 @@ class Data:
         data_batches = [data[:, i:i + width] for i in range(nb_batches)]
         return data_batches
 
-Data.convert();
+    def training(self):
+        lysandre = [[x, [1, 0, 0, 0]] for x in self.fetch("Lysandre", width=50)]
+        nathan = [[x, [0, 1, 0, 0]] for x in self.fetch("Nathan", width=50)]
+        samuel = [[x, [0, 0, 1, 0]] for x in self.fetch("Sam", width=50)]
+        morgane = [[x, [0, 0, 0, 1]] for x in self.fetch("Morgane", width=50)]
+
+        dataset = lysandre + nathan + samuel + morgane
+        shuffle(dataset)
+
+        x = list(map(lambda elem: elem[0], dataset))
+        y = list(map(lambda elem: elem[1], dataset))
+
+        x_train = x[0:int(len(x) * 8/10)]
+        x_test = x[int(len(x) * 8/10)+1:]
+
+        y_train = y[0:int(len(x) * 8/10)]
+        y_test = y[int(len(x) * 8/10)+1:]
+
+        return (x_train, y_train), (x_test, y_test)
+
+
 data = Data(True)
-morgane = data.fetch("Morgane", width=5000)
-display_PIL(morgane[0])
+morgane = data.training()
