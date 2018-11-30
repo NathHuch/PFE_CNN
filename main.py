@@ -18,6 +18,8 @@ dir = "Donnes_wav"
 list = os.listdir(dir)  # dir is your directory path
 number_files = len(list)
 index = 0
+max_dim = 0
+min_dim = 431
 while index!=number_files:
     os.chdir("C:\\Users\\Nathan\\Documents\\Nathan_Travail\\I3\\PFE\\Python\\Creation_Spectre")
     # On récupère les fichiers audio générés et les métadonnées stockées dans le fichier json
@@ -47,9 +49,9 @@ while index!=number_files:
     # plt.show()
 
     # Sous- échantillonnage pour arriver à une fréquence d'échantillonnage de fe/4 = 11025 Hz
-    data = data[0:data_length:6]
+    data = data[0:data_length:4]
     # mise à jour des nouveaux paramètres
-    fse = fe / 6
+    fse = fe / 4
     data_length = data.shape[0]
 
     # Nouvelle visuaisation possible des données
@@ -65,7 +67,7 @@ while index!=number_files:
     # del t,tse
 
     # Paramètres des STFT
-    NFFT = 2 ** 10  # taille des fft
+    NFFT = 2**6 # taille des fft
 
     # retard_estimé = estimation_delay(donéées,taille_des_fenêtres_étudiées,voie à comparer)
     # retard = estimation_delay(data, NFFT, 0)
@@ -98,13 +100,19 @@ while index!=number_files:
     PSD = np.zeros((int(NFFT/2), result.shape[1]))
     for compo in np.arange(0, result.shape[1]):
         # for channel in np.arange(0, nb_sources):
-            PSD[:, compo] = result[:, compo] * np.conjugate(result[:, compo])
+            PSD[:, compo] = np.real(result[:, compo] * np.conjugate(result[:, compo]))
     dir = "Donnes_wav"
     os.chdir("C:\\Users\\Nathan\\Documents\\Nathan_Travail\\I3\\PFE\\Python\\Creation_Spectre\\Matrice_images")
     np.savetxt(list[index][:-3]+'txt', PSD)
-    print('HI')
     #np.loadtxt(list[index][:-3]+'txt')
     index +=1
+    c_max_dim = PSD.shape[1]
+    c_min_dim = PSD.shape[1]
+    if c_max_dim > max_dim:
+        max_dim = c_max_dim
+    if c_min_dim < min_dim:
+        min_dim = c_min_dim
+print('hI')
     # object_pi = math.pi
     # file_pi = open('filename_pi.obj', 'w')
     # pickle.dump(object_pi, file_pi)

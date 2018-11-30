@@ -14,5 +14,5 @@ for name in list:
     index_file = 0                    # On récupère le fichier à l'index
     while index_file!=nb_file:
         X = np.loadtxt(dir+'\\'+list[index_file])
-        
+
 
