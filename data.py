@@ -7,7 +7,7 @@ from random import shuffle
 
 class Data:
 
-    def __init__(self, load=True):
+    def __init__(self, load=False):
         if load:
             print('Loading data ...')
             lysandre_data = np.loadtxt('Matrice_grandes_images/' + 'Lysandre' + '.txt')
@@ -84,11 +84,11 @@ class Data:
         data_batches = [data[:, i:i + width] for i in range(nb_batches)]
         return data_batches
 
-    def training(self):
-        lysandre = [[x, [1, 0, 0, 0]] for x in self.fetch("Lysandre", width=50)]
-        nathan = [[x, [0, 1, 0, 0]] for x in self.fetch("Nathan", width=50)]
-        samuel = [[x, [0, 0, 1, 0]] for x in self.fetch("Sam", width=50)]
-        morgane = [[x, [0, 0, 0, 1]] for x in self.fetch("Morgane", width=50)]
+    def training(self, width=512):
+        lysandre = [[x, [1, 0, 0, 0]] for x in self.fetch("Lysandre", width=width)]
+        nathan = [[x, [0, 1, 0, 0]] for x in self.fetch("Nathan", width=width)]
+        samuel = [[x, [0, 0, 1, 0]] for x in self.fetch("Sam", width=width)]
+        morgane = [[x, [0, 0, 0, 1]] for x in self.fetch("Morgane", width=width)]
 
         dataset = lysandre + nathan + samuel + morgane
         shuffle(dataset)
@@ -102,7 +102,7 @@ class Data:
         y_train = y[0:int(len(x) * 8/10)]
         y_test = y[int(len(x) * 8/10)+1:]
 
-        return (x_train, y_train), (x_test, y_test)
+        return (np.expand_dims(np.array(x_train), axis=3), np.array(y_train)), (np.expand_dims(np.array(x_test), axis=3), np.array(y_test))
 
 
 data = Data(True)
