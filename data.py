@@ -9,19 +9,7 @@ class Data:
 
     def __init__(self, load=False):
         if load:
-            print('Loading data ...')
-            lysandre_data = np.loadtxt('Matrice_grandes_images/' + 'Lysandre' + '.txt')
-            nathan_data = np.loadtxt('Matrice_grandes_images/' + 'Nathan' + '.txt')
-            sam_data = np.loadtxt('Matrice_grandes_images/' + 'Sam' + '.txt')
-            morgane_data = np.loadtxt('Matrice_grandes_images/' + 'Morgane' + '.txt')
-
-            self.data = {
-                "Lysandre": lysandre_data,
-                "Nathan": nathan_data,
-                "Sam": sam_data,
-                "Morgane": morgane_data
-            }
-            print('Data loaded !')
+            self.data = {}
 
     @staticmethod
     def convert():
@@ -103,7 +91,3 @@ class Data:
         y_test = y[int(len(x) * 8/10)+1:]
 
         return (np.expand_dims(np.array(x_train), axis=3), np.array(y_train)), (np.expand_dims(np.array(x_test), axis=3), np.array(y_test))
-
-
-data = Data(True)
-morgane = data.training()
